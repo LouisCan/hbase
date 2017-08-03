@@ -306,7 +306,8 @@ END
   post {
     always {
       step([$class: 'hudson.plugins.jira.JiraIssueUpdater', 
-            issueSelector: [$class: 'hudson.plugins.jira.selector.DefaultIssueSelector'])
+            issueSelector: [$class: 'hudson.plugins.jira.selector.DefaultIssueSelector']
+           ])
     }
     failure {
       deleteDir()
