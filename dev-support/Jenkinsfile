@@ -299,6 +299,9 @@ END
     }
   }
   post {
+    always {
+      jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
+    }
     failure {
       deleteDir()
     }
