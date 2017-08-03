@@ -110,7 +110,8 @@ curl -L  -o personality.sh "${env.PROJET_PERSONALITY}"
       environment {
         // TODO does hadoopcheck need to be jdk specific?
         // Should be things that work with multijdk
-        TESTS = 'all,-unit,-findbugs'
+        // temp remove hadoopcheck
+        TESTS = 'all,-unit,-findbugs,-hadoopcheck'
         // on branches that don't support jdk7, this will already be JAVA_HOME, so we'll end up not
         // doing multijdk there.
         MULTIJDK = '/usr/lib/jvm/java-8-oracle'
@@ -142,6 +143,8 @@ curl -L  -o personality.sh "${env.PROJET_PERSONALITY}"
     stage ('yetus jdk7 checks') {
       when {
         branch 'branch-1*'
+        //disable
+        expression { false; }
       }
       environment {
         TESTS = 'mvninstall,compile,javac,unit,htmlout'
@@ -195,6 +198,8 @@ curl -L  -o personality.sh "${env.PROJET_PERSONALITY}"
       when {
         not {
           branch 'branch-1.1*'
+        //disable
+        expression { false; }
         }
       }
       environment {
@@ -300,7 +305,8 @@ END
   }
   post {
     always {
-      jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
+      step([$class: 'hudson.plugins.jira.JiraIssueUpdater', 
+            issueSelector: [$class: 'hudson.plugins.jira.selector.DefaultIssueSelector'])
     }
     failure {
       deleteDir()
